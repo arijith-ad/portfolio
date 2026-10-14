@@ -1,0 +1,21 @@
+{
+  "name": "arijith-m-harry-potter-portfolio",
+  "version": "1.0.0",
+  "description": "Harry Potter Themed Wizarding Portfolio for Arijith M (MCA Student, CogniLearn Intern)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "serve": "python3 -m http.server 3000"
+  },
+  "keywords": [
+    "portfolio",
+    "arijith-m",
+    "harry-potter",
+    "mca",
+    "cognilearn",
+    "wizard"
+  ],
+  "author": "Arijith M",
+  "license": "MIT"
+}

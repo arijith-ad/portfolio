@@ -1,0 +1,1767 @@
+/* ==========================================================================
+   HARRY POTTER WIZARDING THEME - ARIJITH M PORTFOLIO STYLES
+   ========================================================================== */
+
+:root {
+  /* Color Palette - Gryffindor Default */
+  --primary-gold: #eeba30;
+  --secondary-gold: #d3a625;
+  --dark-gold: #b38612;
+  --parchment-bg: #f4e8c1;
+  --parchment-dark: #3b2a1a;
+  --parchment-text: #26170d;
+  --ink-color: #1a0f07;
+  
+  --house-primary: #740001;
+  --house-secondary: #ae0001;
+  --house-accent: #eeba30;
+  --house-dark: #3d0001;
+  --house-glow: rgba(238, 186, 48, 0.4);
+
+  --night-sky-deep: #040711;
+  --night-sky-blue: #0b1124;
+  --castle-mist: rgba(14, 23, 48, 0.85);
+  
+  --font-title: 'Cinzel Decorative', 'Pirata One', Georgia, serif;
+  --font-sub: 'Cinzel', Georgia, serif;
+  --font-body: 'EB Garamond', Georgia, serif;
+  --font-magic: 'MedievalSharp', cursive, serif;
+
+  --transition-smooth: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  --box-shadow-magical: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px var(--house-glow);
+}
+
+/* House Overrides */
+body.house-slytherin {
+  --house-primary: #1a472a;
+  --house-secondary: #2a623d;
+  --house-accent: #aaaaaa;
+  --house-dark: #0d2817;
+  --house-glow: rgba(42, 98, 61, 0.45);
+}
+
+body.house-ravenclaw {
+  --house-primary: #0e1a40;
+  --house-secondary: #222f5b;
+  --house-accent: #946b2d;
+  --house-dark: #070d22;
+  --house-glow: rgba(148, 107, 45, 0.45);
+}
+
+body.house-hufflepuff {
+  --house-primary: #ecb939;
+  --house-secondary: #f0c75e;
+  --house-accent: #372e29;
+  --house-dark: #826111;
+  --house-glow: rgba(236, 185, 57, 0.45);
+}
+
+/* ==========================================================================
+   Base & Reset
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  background-color: var(--night-sky-deep);
+  color: #e6dfd5;
+}
+
+body {
+  font-family: var(--font-body);
+  line-height: 1.7;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+  background: 
+    linear-gradient(to bottom, rgba(4, 7, 17, 0.75), rgba(7, 12, 28, 0.9) 70%, #03050a),
+    url('assets/hogwarts_castle.jpg') no-repeat center top fixed;
+  background-size: cover;
+  cursor: default;
+}
+
+/* Custom Antique Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #090e1d;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--house-primary), var(--house-accent));
+  border-radius: 5px;
+  border: 1px solid rgba(238, 186, 48, 0.4);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-gold);
+}
+
+/* ==========================================================================
+   Full Screen Canvas Elements
+   ========================================================================== */
+#stars-canvas,
+#wand-canvas,
+#snitch-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+#snitch-canvas {
+  z-index: 100;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+#wand-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  display: none; /* enabled via JS on mousemove */
+}
+
+.wand-tip {
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 12px 4px var(--primary-gold), 0 0 24px 8px #fff;
+  animation: wandFlicker 1.5s infinite alternate;
+}
+
+@keyframes wandFlicker {
+  0% { transform: scale(0.8); opacity: 0.85; }
+  100% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 16px 6px #ffe066, 0 0 30px 10px #ffea85; }
+}
+
+/* Lumos Flashlight Overlay */
+#lumos-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(circle 220px at var(--mouse-x, 50%) var(--mouse-y, 50%), transparent 0%, rgba(3, 5, 12, 0.96) 100%);
+}
+#lumos-overlay.lumos-active {
+  opacity: 1;
+}
+
+/* Secret Lumos Runes */
+.secret-rune {
+  margin-top: 1.5rem;
+  padding: 0.8rem 1.2rem;
+  background: rgba(14, 23, 48, 0.85);
+  border: 1px dashed var(--primary-gold);
+  border-radius: 6px;
+  color: #fff;
+  font-family: var(--font-magic);
+  text-align: center;
+  font-size: 1.05rem;
+  display: none;
+  animation: glowPulse 2s infinite alternate;
+}
+body.lumos-on .secret-rune {
+  display: block;
+}
+
+@keyframes glowPulse {
+  from { box-shadow: 0 0 8px rgba(238, 186, 48, 0.3); text-shadow: 0 0 5px #ffd700; }
+  to { box-shadow: 0 0 20px rgba(238, 186, 48, 0.8); text-shadow: 0 0 15px #ffffff; }
+}
+
+/* ==========================================================================
+   Navigation Bar (The Hogwarts Header)
+   ========================================================================== */
+.magic-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 2rem;
+  background: rgba(8, 12, 24, 0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(238, 186, 48, 0.3);
+  z-index: 1000;
+  transition: var(--transition-smooth);
+}
+
+.magic-nav.scrolled {
+  background: rgba(4, 7, 16, 0.96);
+  padding: 0.5rem 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  color: var(--primary-gold);
+  text-decoration: none;
+}
+.crest-icon {
+  font-size: 1.4rem;
+  filter: drop-shadow(0 0 8px var(--primary-gold));
+  animation: pulseCrest 2.5s infinite alternate ease-in-out;
+}
+@keyframes pulseCrest {
+  0% { transform: scale(1); filter: drop-shadow(0 0 6px var(--primary-gold)); }
+  100% { transform: scale(1.15) rotate(5deg); filter: drop-shadow(0 0 15px #ffd700); }
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+}
+.nav-link {
+  color: #cfd6e6;
+  text-decoration: none;
+  font-family: var(--font-sub);
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: var(--transition-smooth);
+  position: relative;
+  padding: 0.3rem 0;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--primary-gold);
+  transition: width 0.3s ease, left 0.3s ease;
+  box-shadow: 0 0 8px var(--primary-gold);
+}
+.nav-link:hover {
+  color: var(--primary-gold);
+  transform: translateY(-2px);
+}
+.nav-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* House Selector */
+.house-picker {
+  display: flex;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
+  padding: 3px;
+  border: 1px solid rgba(238, 186, 48, 0.3);
+}
+.house-btn {
+  background: transparent;
+  border: none;
+  padding: 4px 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: var(--transition-smooth);
+}
+.house-btn:hover {
+  transform: scale(1.25);
+}
+.house-btn.active {
+  background: rgba(238, 186, 48, 0.25);
+  box-shadow: 0 0 10px var(--primary-gold);
+}
+
+/* Magical Buttons */
+.magical-btn {
+  background: linear-gradient(135deg, var(--house-primary), var(--house-secondary));
+  color: #fff;
+  border: 1px solid var(--primary-gold);
+  padding: 0.6rem 1.4rem;
+  border-radius: 25px;
+  font-family: var(--font-sub);
+  font-size: 0.9rem;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px rgba(238, 186, 48, 0.2);
+  text-decoration: none;
+}
+.magical-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), 0 0 18px var(--primary-gold);
+  color: #fff;
+}
+.magical-btn.primary-gold {
+  background: linear-gradient(135deg, #c4911e, #f1c448);
+  color: #211304;
+  font-weight: 700;
+  border: 1px solid #ffe699;
+}
+.magical-btn.primary-gold:hover {
+  box-shadow: 0 0 25px #ffd700, 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+.magical-btn.secondary-parchment {
+  background: rgba(244, 232, 193, 0.15);
+  color: var(--primary-gold);
+  border: 1px solid var(--primary-gold);
+  backdrop-filter: blur(5px);
+}
+.magical-btn.secondary-parchment:hover {
+  background: rgba(244, 232, 193, 0.28);
+}
+.icon-btn {
+  padding: 0.5rem 1rem;
+}
+
+/* ==========================================================================
+   Interactive Spell Dock (Floating Cast Bar)
+   ========================================================================== */
+.spell-dock {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(10, 15, 30, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(238, 186, 48, 0.4);
+  border-radius: 16px;
+  padding: 0.8rem 0.6rem;
+  z-index: 900;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(238, 186, 48, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.spell-dock-title {
+  font-family: var(--font-sub);
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--primary-gold);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-bottom: 1px solid rgba(238, 186, 48, 0.2);
+  padding-bottom: 0.4rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.spell-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.spell-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(238, 186, 48, 0.25);
+  border-radius: 10px;
+  padding: 0.5rem 0.6rem;
+  color: #e3e8f5;
+  font-family: var(--font-sub);
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  transition: var(--transition-smooth);
+  width: 58px;
+}
+.spell-btn .spell-glyph {
+  font-size: 1.25rem;
+}
+.spell-btn:hover {
+  background: rgba(238, 186, 48, 0.2);
+  border-color: var(--primary-gold);
+  transform: scale(1.1);
+  box-shadow: 0 0 12px var(--primary-gold);
+}
+.spell-btn.active {
+  background: linear-gradient(135deg, var(--house-primary), var(--house-secondary));
+  border-color: var(--primary-gold);
+  box-shadow: 0 0 15px var(--house-glow);
+}
+
+/* Wingardium Leviosa Floating State */
+body.leviosa-active .parchment-letter,
+body.leviosa-active .prophet-paper,
+body.leviosa-active .cognilearn-card,
+body.leviosa-active .spellbook-card,
+body.leviosa-active .vault-card {
+  animation: levitateElements 4s infinite ease-in-out alternate;
+}
+@keyframes levitateElements {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(0.4deg); box-shadow: 0 25px 40px rgba(0, 0, 0, 0.7), 0 0 25px var(--primary-gold); }
+  100% { transform: translateY(-6px) rotate(-0.3deg); }
+}
+
+/* ==========================================================================
+   Hero Section & Floating Candles
+   ========================================================================== */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 7rem 1.5rem 4rem;
+  overflow: hidden;
+}
+
+/* 3D Floating Candles */
+.floating-candles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.magic-candle {
+  position: absolute;
+  width: 12px;
+  height: 60px;
+  background: linear-gradient(to right, #e8dfcf 0%, #ffffff 40%, #c4b89e 100%);
+  border-radius: 4px;
+  box-shadow: inset 0 -4px 6px rgba(0, 0, 0, 0.3), 0 10px 15px rgba(0, 0, 0, 0.5);
+  animation: candleFloat var(--float-duration, 5s) infinite ease-in-out alternate;
+}
+
+.candle-flame {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 20px;
+  background: radial-gradient(ellipse at bottom, #fff 10%, #ffd400 45%, #ff4d00 80%, transparent 100%);
+  border-radius: 50% 50% 35% 35%;
+  filter: drop-shadow(0 0 10px #ffbb00) drop-shadow(0 0 20px #ff7700);
+  animation: flameFlicker var(--flicker-duration, 1.2s) infinite alternate ease-in-out;
+}
+
+@keyframes candleFloat {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(var(--float-delta, -22px)); }
+}
+
+@keyframes flameFlicker {
+  0% { transform: translateX(-50%) scale(0.9) skewX(-2deg); opacity: 0.9; }
+  50% { transform: translateX(-50%) scale(1.1) skewX(3deg); opacity: 1; }
+  100% { transform: translateX(-50%) scale(0.95) skewX(-1deg); opacity: 0.85; }
+}
+
+.hero-centerpiece {
+  position: relative;
+  z-index: 10;
+  max-width: 900px;
+  background: radial-gradient(circle, rgba(11, 17, 36, 0.85) 0%, rgba(4, 7, 16, 0.9) 75%);
+  padding: 3.5rem 2.5rem;
+  border-radius: 24px;
+  border: 1px solid rgba(238, 186, 48, 0.4);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.8), 0 0 30px rgba(238, 186, 48, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.crest-emblem-wrap {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1.5rem;
+  position: relative;
+}
+.hero-crest-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 25px rgba(238, 186, 48, 0.6), 0 8px 16px rgba(0, 0, 0, 0.7);
+  border: 2px solid var(--primary-gold);
+  transition: transform 0.5s ease;
+}
+.hero-crest-img:hover {
+  transform: rotate(15deg) scale(1.08);
+}
+
+.hero-welcome-badge {
+  font-family: var(--font-sub);
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  color: var(--primary-gold);
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-family: var(--font-title);
+  margin-bottom: 1rem;
+}
+.title-sub {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #cfd6e6;
+  letter-spacing: 2px;
+  font-family: var(--font-sub);
+}
+.title-main {
+  display: block;
+  font-size: 3.8rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  line-height: 1.15;
+  margin-top: 0.3rem;
+}
+
+.gold-shimmer {
+  background: linear-gradient(120deg, #fff 0%, #ffd700 25%, #ffb300 50%, #fff 75%, #ffd700 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shimmerGold 4s linear infinite;
+  text-shadow: 0 0 25px rgba(238, 186, 48, 0.4);
+}
+@keyframes shimmerGold {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.hero-subtitle {
+  font-size: 1.35rem;
+  color: #e2dbcd;
+  font-family: var(--font-magic);
+  letter-spacing: 1px;
+  margin-bottom: 2rem;
+}
+
+/* Hero Quick Portals (GitHub & LinkedIn) */
+.hero-quick-portals {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2.2rem;
+  flex-wrap: wrap;
+}
+.portal-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.9rem 1.6rem;
+  border-radius: 14px;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  border: 1px solid rgba(238, 186, 48, 0.3);
+  background: rgba(18, 25, 48, 0.7);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  min-width: 240px;
+}
+.portal-btn i {
+  font-size: 1.5rem;
+  margin-bottom: 0.4rem;
+  color: var(--primary-gold);
+}
+.portal-btn span {
+  font-family: var(--font-sub);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+.portal-url {
+  font-size: 0.78rem;
+  color: #9cb0d8;
+  font-family: monospace;
+}
+.portal-btn:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: var(--primary-gold);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), 0 0 20px var(--primary-gold);
+  background: rgba(28, 38, 70, 0.85);
+}
+.github-portal:hover i {
+  color: #ffffff;
+}
+.linkedin-portal:hover i {
+  color: #0a66c2;
+}
+
+.hero-action-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Section Universal Wrappers
+   ========================================================================== */
+section {
+  padding: 5rem 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.section-title-wrap {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3.5rem;
+}
+.section-tag {
+  display: inline-block;
+  font-family: var(--font-sub);
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  color: var(--primary-gold);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+.section-heading {
+  font-family: var(--font-title);
+  font-size: 2.5rem;
+  color: #f7eed8;
+  letter-spacing: 1.5px;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+.section-desc {
+  font-size: 1.15rem;
+  color: #bfcbde;
+}
+
+/* ==========================================================================
+   Section: The Hogwarts Acceptance Letter
+   ========================================================================== */
+.letter-section {
+  background: radial-gradient(circle at center, rgba(16, 23, 44, 0.7) 0%, transparent 80%);
+}
+
+.letter-scroll-wrapper {
+  max-width: 820px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Wax Seal & Envelope Interactive Front */
+.envelope-back {
+  display: none; /* revealed when folded */
+}
+
+/* Unfolded Authentic Parchment */
+.parchment-letter {
+  background: 
+    linear-gradient(rgba(247, 237, 212, 0.94), rgba(239, 224, 187, 0.97)),
+    url('assets/parchment_texture.jpg') center/cover no-repeat;
+  color: var(--parchment-text);
+  padding: 4rem 3.5rem;
+  border-radius: 12px;
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.85),
+    inset 0 0 60px rgba(100, 65, 25, 0.35),
+    0 0 15px rgba(238, 186, 48, 0.3);
+  position: relative;
+  border: 1px solid #745125;
+  transition: var(--transition-smooth);
+}
+
+.parchment-letter::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 1px solid rgba(138, 98, 52, 0.35);
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+.parchment-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.letter-seal-mini {
+  width: 65px;
+  height: 65px;
+  margin: 0 auto 0.8rem;
+}
+.letter-seal-mini img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.letter-school-name {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  color: #422810;
+  letter-spacing: 1px;
+}
+.letter-headmaster {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #5c3818;
+}
+.parchment-divider {
+  font-size: 1.2rem;
+  color: #a8793b;
+  margin-top: 0.5rem;
+}
+
+.letter-body {
+  font-size: 1.25rem;
+  line-height: 1.85;
+  color: #2e1d0f;
+}
+.letter-salutation {
+  font-size: 1.35rem;
+  margin-bottom: 1.2rem;
+}
+.letter-body p {
+  margin-bottom: 1.2rem;
+}
+
+.letter-highlight-box {
+  background: rgba(142, 100, 48, 0.12);
+  border-left: 4px solid #8e6430;
+  padding: 1.2rem 1.5rem;
+  margin: 1.8rem 0;
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.highlight-icon {
+  font-size: 1.8rem;
+  color: #8e6430;
+}
+.highlight-text {
+  font-size: 1.18rem;
+}
+.gold-text {
+  font-weight: 700;
+  color: #740001;
+}
+
+.letter-credentials-list {
+  list-style: none;
+  margin: 1.5rem 0;
+  padding-left: 0.5rem;
+}
+.letter-credentials-list li {
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.letter-credentials-list li i {
+  color: #740001;
+  font-size: 1.2rem;
+}
+.letter-credentials-list a {
+  color: #8b0000;
+  text-decoration: underline;
+  font-weight: 600;
+  transition: color 0.2s ease;
+  word-break: break-all;
+}
+.letter-credentials-list a:hover {
+  color: #d32f2f;
+}
+
+.letter-closing {
+  margin-top: 2.2rem;
+  font-size: 1.2rem;
+}
+.mcgonagall-signature {
+  font-family: var(--font-magic);
+  font-size: 1.7rem;
+  color: #570000;
+  display: inline-block;
+  margin: 0.3rem 0;
+}
+
+/* ==========================================================================
+   Section: The Daily Prophet Newspaper
+   ========================================================================== */
+.prophet-layout {
+  max-width: 950px;
+  margin: 0 auto;
+}
+
+.prophet-paper {
+  background: #f1ebd8;
+  color: #1a1714;
+  padding: 3rem 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+  border: 2px solid #3c342a;
+  position: relative;
+}
+
+.paper-header {
+  border-bottom: 3px double #2c251d;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.prophet-logo {
+  font-family: 'Pirata One', var(--font-title);
+  font-size: 3.8rem;
+  letter-spacing: 4px;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+  color: #15110d;
+}
+.paper-meta {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-sub);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  padding: 0.3rem 0;
+  margin-bottom: 0.8rem;
+}
+.paper-headline {
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  line-height: 1.25;
+  color: #1a1714;
+}
+
+.paper-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* Moving Wizard Picture Frame */
+.moving-portrait-frame {
+  background: #231d16;
+  padding: 10px;
+  border: 2px solid #574635;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.portrait-photo {
+  background: #14161b;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #3d3124;
+}
+
+.portrait-avatar {
+  width: 100%;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: radial-gradient(circle, #252a36 0%, #0d0f14 100%);
+  animation: photoShift 6s infinite ease-in-out;
+}
+
+@keyframes photoShift {
+  0% { filter: sepia(0.6) contrast(1.1) brightness(0.95); transform: scale(1); }
+  50% { filter: sepia(0.4) contrast(1.2) brightness(1.05); transform: scale(1.02); }
+  100% { filter: sepia(0.6) contrast(1.1) brightness(0.95); transform: scale(1); }
+}
+
+.wizard-silhouette {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--primary-gold);
+}
+.magical-initials {
+  font-family: var(--font-title);
+  font-size: 4rem;
+  font-weight: 900;
+  text-shadow: 0 0 20px rgba(238, 186, 48, 0.7);
+}
+.portrait-hat {
+  font-size: 2rem;
+  margin-top: -0.5rem;
+  color: #d3a625;
+  animation: hatTilt 3s infinite ease-in-out alternate;
+}
+@keyframes hatTilt {
+  0% { transform: rotate(-5deg); }
+  100% { transform: rotate(8deg); }
+}
+
+.portrait-glimmer {
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  animation: sweepGlimmer 4.5s infinite;
+}
+@keyframes sweepGlimmer {
+  0% { left: -150%; }
+  35% { left: 150%; }
+  100% { left: 150%; }
+}
+
+.portrait-scanlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px);
+  pointer-events: none;
+}
+
+.portrait-caption {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.92rem;
+  padding: 0.6rem;
+  color: #c9bea7;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.paper-article {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #2a231b;
+}
+.article-title {
+  font-family: var(--font-title);
+  font-size: 1.45rem;
+  margin-bottom: 0.8rem;
+  color: #1a1714;
+}
+.paper-bulletin {
+  margin-top: 1.5rem;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px dashed #6b5743;
+  padding: 1rem 1.2rem;
+  border-radius: 4px;
+}
+.paper-bulletin ul {
+  list-style-type: square;
+  margin-left: 1.2rem;
+  margin-top: 0.5rem;
+}
+.paper-bulletin a {
+  color: #740001;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Section: CogniLearn Internship & Work Schedule
+   ========================================================================== */
+.internship-section {
+  background: radial-gradient(circle at bottom, rgba(16, 26, 54, 0.7) 0%, transparent 80%);
+}
+
+.internship-showcase {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2.5rem;
+}
+
+.cognilearn-card {
+  background: linear-gradient(135deg, rgba(17, 25, 48, 0.88), rgba(9, 13, 27, 0.95));
+  border: 1px solid rgba(238, 186, 48, 0.4);
+  border-radius: 18px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(238, 186, 48, 0.15);
+  backdrop-filter: blur(10px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-crest {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: rgba(238, 186, 48, 0.15);
+  border: 1px solid var(--primary-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: var(--primary-gold);
+  margin-bottom: 1.5rem;
+}
+
+.badge-active {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  padding: 0.35rem 0.8rem;
+  border-radius: 20px;
+  font-family: var(--font-sub);
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.cognilearn-card h3 {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  color: #ffffff;
+  margin-bottom: 0.3rem;
+}
+.cognilearn-card h4 {
+  font-family: var(--font-sub);
+  font-size: 1.15rem;
+  color: var(--primary-gold);
+  margin-bottom: 1.2rem;
+}
+.cognilearn-card p {
+  font-size: 1.1rem;
+  color: #cfd8ea;
+  line-height: 1.7;
+  margin-bottom: 1.8rem;
+}
+
+.internship-meta-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.internship-meta-tags span {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(238, 186, 48, 0.2);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #cfdaf0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Schedule Timeline Scroll */
+.schedule-scroll-wrap {
+  background: 
+    linear-gradient(rgba(247, 237, 212, 0.94), rgba(239, 224, 187, 0.97)),
+    url('assets/parchment_texture.jpg') center/cover no-repeat;
+  color: var(--parchment-text);
+  border-radius: 16px;
+  padding: 2.2rem 2rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85), inset 0 0 40px rgba(100, 65, 25, 0.3);
+  border: 1px solid #745125;
+}
+
+.schedule-title-banner {
+  font-family: var(--font-title);
+  font-size: 1.45rem;
+  color: #422810;
+  border-bottom: 2px solid #8e6430;
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.schedule-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  position: relative;
+}
+.schedule-timeline::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 45px;
+  width: 2px;
+  background: rgba(142, 100, 48, 0.4);
+}
+
+.schedule-item {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  position: relative;
+}
+
+.time-rune {
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: #740001;
+  color: #f7eed8;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  min-width: 90px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+.schedule-details h5 {
+  font-family: var(--font-sub);
+  font-size: 1.15rem;
+  color: #2b1706;
+  margin-bottom: 0.2rem;
+}
+.schedule-details p {
+  font-size: 0.98rem;
+  color: #4f3b2a;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Section: Standard Book of Spells (Skills)
+   ========================================================================== */
+.spell-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.spellbook-card {
+  background: linear-gradient(145deg, #161f38, #0c1222);
+  border: 1px solid rgba(238, 186, 48, 0.35);
+  border-radius: 16px;
+  padding: 2.2rem 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.spellbook-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--primary-gold);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 25px var(--house-glow);
+}
+
+.spell-icon {
+  font-size: 2rem;
+  color: var(--primary-gold);
+  margin-bottom: 1rem;
+}
+
+.spellbook-card h3 {
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+  color: #ffffff;
+  margin-bottom: 0.2rem;
+}
+
+.book-category {
+  display: block;
+  font-family: var(--font-sub);
+  font-size: 0.85rem;
+  color: var(--primary-gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+}
+
+.mana-skill-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mana-skill-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 1.05rem;
+  color: #dbe3f5;
+}
+
+.mana-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(238, 186, 48, 0.2);
+}
+
+.mana-fill {
+  height: 100%;
+  width: var(--level, 80%);
+  background: linear-gradient(90deg, var(--house-secondary), var(--primary-gold));
+  border-radius: 4px;
+  box-shadow: 0 0 10px var(--primary-gold);
+  transition: width 1.2s ease-in-out;
+}
+
+/* ==========================================================================
+   Section: Room of Requirement (Vaults / Projects)
+   ========================================================================== */
+.vault-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.vault-card {
+  perspective: 1000px;
+}
+
+.vault-card-inner {
+  background: radial-gradient(circle at top right, rgba(29, 39, 71, 0.85), rgba(12, 17, 33, 0.95));
+  border: 1px solid rgba(238, 186, 48, 0.3);
+  border-radius: 16px;
+  padding: 2.2rem 1.8rem;
+  position: relative;
+  transition: var(--transition-smooth);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 320px;
+}
+
+.vault-card:hover .vault-card-inner {
+  transform: translateY(-8px);
+  border-color: var(--primary-gold);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(238, 186, 48, 0.3);
+}
+
+.vault-icon {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.vault-card-inner h4 {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 0.8rem;
+  line-height: 1.3;
+}
+
+.vault-card-inner p {
+  color: #b8c7e0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.tech-tags span {
+  background: rgba(238, 186, 48, 0.12);
+  color: var(--primary-gold);
+  border: 1px solid rgba(238, 186, 48, 0.3);
+  font-size: 0.8rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-family: var(--font-sub);
+}
+
+.card-links {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1rem;
+}
+
+.vault-link {
+  color: var(--primary-gold);
+  text-decoration: none;
+  font-family: var(--font-sub);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: var(--transition-smooth);
+}
+.vault-link:hover {
+  color: #ffffff;
+  transform: translateX(4px);
+}
+.vault-status {
+  font-size: 0.8rem;
+  color: #8da4cb;
+  font-family: var(--font-sub);
+}
+
+/* ==========================================================================
+   Section: The Marauder's Map
+   ========================================================================== */
+.map-parchment-frame {
+  max-width: 1050px;
+  margin: 0 auto;
+  background: 
+    linear-gradient(rgba(247, 237, 212, 0.95), rgba(239, 224, 187, 0.98)),
+    url('assets/parchment_texture.jpg') center/cover no-repeat;
+  color: var(--parchment-text);
+  border-radius: 18px;
+  padding: 3.5rem 3rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), inset 0 0 60px rgba(100, 65, 25, 0.35);
+  border: 2px solid #6e4b21;
+  position: relative;
+}
+
+.map-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.map-crest-quote {
+  font-family: var(--font-magic);
+  font-size: 1.15rem;
+  color: #61401f;
+  margin-bottom: 0.4rem;
+}
+.map-title {
+  font-family: 'Pirata One', var(--font-title);
+  font-size: 3.6rem;
+  letter-spacing: 3px;
+  color: #2b180a;
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+}
+.map-subtitle {
+  font-family: var(--font-sub);
+  font-size: 1.1rem;
+  color: #5c3b1e;
+  margin-bottom: 1.5rem;
+}
+
+.solemn-btn {
+  background: #740001;
+  color: #f7eed8;
+  border: 1px solid #d3a625;
+  font-size: 1.05rem;
+  padding: 0.8rem 1.8rem;
+}
+.solemn-btn:hover {
+  background: #940001;
+  box-shadow: 0 0 20px rgba(211, 166, 37, 0.6);
+}
+
+.map-canvas-wrap {
+  position: relative;
+  min-height: 380px;
+  border: 1px dashed rgba(110, 75, 33, 0.4);
+  border-radius: 12px;
+  padding: 2.5rem 1.5rem;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.map-footsteps-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.map-waypoints {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  position: relative;
+  z-index: 5;
+}
+
+.waypoint {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: var(--transition-smooth);
+}
+
+.waypoint-pin {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #740001;
+  color: #f7eed8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  border: 2px solid #d3a625;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+}
+
+.pulse-waypoint .waypoint-pin {
+  animation: pulsePin 2s infinite;
+}
+@keyframes pulsePin {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(116, 0, 1, 0.7); }
+  70% { transform: scale(1.15); box-shadow: 0 0 0 15px rgba(116, 0, 1, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(116, 0, 1, 0); }
+}
+
+.waypoint-label .wp-date {
+  font-family: var(--font-sub);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #740001;
+  font-weight: 700;
+  display: block;
+}
+.waypoint-label h4 {
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  color: #211206;
+  margin: 0.3rem 0;
+}
+.waypoint-label p {
+  font-size: 0.95rem;
+  color: #4b3623;
+  line-height: 1.45;
+}
+
+.map-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-family: var(--font-magic);
+  font-size: 1.05rem;
+  color: #634323;
+}
+
+/* ==========================================================================
+   Section: Owl Post & Contact
+   ========================================================================= */
+.contact-container {
+  max-width: 1050px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2.5rem;
+}
+
+.owl-form-card {
+  background: linear-gradient(135deg, rgba(16, 23, 44, 0.9), rgba(8, 12, 25, 0.95));
+  border: 1px solid rgba(238, 186, 48, 0.35);
+  border-radius: 18px;
+  padding: 2.5rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+
+.owl-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.form-group label {
+  font-family: var(--font-sub);
+  font-size: 0.95rem;
+  color: var(--primary-gold);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.form-group input,
+.form-group textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(238, 186, 48, 0.3);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  transition: var(--transition-smooth);
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-gold);
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 15px rgba(238, 186, 48, 0.3);
+}
+
+.send-owl-btn {
+  justify-content: center;
+  padding: 0.9rem;
+  font-size: 1.05rem;
+  margin-top: 0.5rem;
+}
+
+/* Flying Owl Animation */
+.owl-flight-box {
+  text-align: center;
+  padding: 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.owl-flight-box.hidden {
+  display: none;
+}
+.flying-owl {
+  font-size: 3.5rem;
+  animation: owlFlyUp 2.5s forwards ease-in-out;
+}
+@keyframes owlFlyUp {
+  0% { transform: translateY(20px) scale(0.8); opacity: 0; }
+  30% { transform: translateY(0) scale(1.1); opacity: 1; }
+  70% { transform: translateY(-40px) scale(1.2); }
+  100% { transform: translateY(-120px) scale(0.6); opacity: 0; }
+}
+
+.owl-direct-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.owl-link-box {
+  background: rgba(14, 21, 41, 0.8);
+  border: 1px solid rgba(238, 186, 48, 0.25);
+  border-radius: 16px;
+  padding: 1.6rem;
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+  transition: var(--transition-smooth);
+}
+.owl-link-box:hover {
+  transform: translateX(6px);
+  border-color: var(--primary-gold);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(238, 186, 48, 0.2);
+}
+
+.link-icon {
+  font-size: 2rem;
+  color: var(--primary-gold);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.7rem;
+  border-radius: 12px;
+  border: 1px solid rgba(238, 186, 48, 0.2);
+}
+
+.link-text h4 {
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  color: #fff;
+  margin-bottom: 0.3rem;
+}
+.link-text p {
+  color: #aebfd9;
+  font-size: 0.98rem;
+  margin-bottom: 0.8rem;
+  line-height: 1.5;
+}
+
+.enchanted-link {
+  color: var(--primary-gold);
+  text-decoration: none;
+  font-family: var(--font-sub);
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: var(--transition-smooth);
+  word-break: break-all;
+}
+.enchanted-link:hover {
+  color: #fff;
+  transform: translateX(3px);
+}
+
+.status-pill {
+  display: inline-block;
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-family: var(--font-sub);
+}
+
+/* ==========================================================================
+   Snitch Toast
+   ========================================================================== */
+.snitch-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: linear-gradient(135deg, #2b1f09, #5e4313);
+  border: 2px solid var(--primary-gold);
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 30px;
+  z-index: 2000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 25px var(--primary-gold);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.snitch-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+.snitch-badge {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  color: #ffd700;
+  display: block;
+  font-weight: 900;
+}
+.snitch-toast p {
+  font-family: var(--font-sub);
+  font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.magical-footer {
+  text-align: center;
+  padding: 4rem 1.5rem 3rem;
+  background: #020408;
+  border-top: 1px solid rgba(238, 186, 48, 0.25);
+  position: relative;
+  z-index: 10;
+}
+
+.footer-wax-seal {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1.5rem;
+}
+.footer-wax-seal img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid var(--primary-gold);
+  box-shadow: 0 0 15px rgba(238, 186, 48, 0.3);
+}
+
+.footer-quote {
+  font-family: var(--font-magic);
+  font-size: 1.15rem;
+  color: #9db2d4;
+  max-width: 650px;
+  margin: 0 auto 1rem;
+  font-style: italic;
+}
+
+.footer-credit {
+  color: #6d80a1;
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+.footer-credit strong {
+  color: var(--primary-gold);
+}
+
+.footer-motto {
+  font-family: var(--font-title);
+  color: var(--primary-gold);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 900px) {
+  .magic-nav {
+    padding: 0.6rem 1rem;
+  }
+  .nav-links {
+    display: none; /* keep clean on mobile */
+  }
+  .title-main {
+    font-size: 2.8rem;
+  }
+  .paper-grid,
+  .internship-showcase,
+  .contact-container {
+    grid-template-columns: 1fr;
+  }
+  .map-waypoints {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .spell-dock {
+    right: 0.6rem;
+    padding: 0.5rem 0.3rem;
+  }
+  .spell-btn {
+    width: 48px;
+    font-size: 0.68rem;
+  }
+}

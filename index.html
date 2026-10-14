@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arijith M | MCA Scholar & Wizard Developer Portfolio</title>
+  <meta name="description" content="Official magical portfolio of Arijith M - MCA Student, Software Developer, and Intern at CogniLearn. Crafted in Harry Potter cinematic wizarding style.">
+  
+  <!-- Google Fonts: Harry Potter Wizarding Aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=MedievalSharp&family=Pirata+One&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome for magical icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="house-gryffindor" id="wizard-body">
+
+  <!-- Wand Sparks & Canvas Layers -->
+  <canvas id="stars-canvas"></canvas>
+  <canvas id="wand-canvas"></canvas>
+  <canvas id="snitch-canvas"></canvas>
+  
+  <!-- Lumos Flashlight Overlay (reveals hidden runes when Lumos is cast) -->
+  <div id="lumos-overlay" class="lumos-hidden"></div>
+
+  <!-- Wand Custom Cursor Element -->
+  <div id="wand-cursor">
+    <div class="wand-tip"></div>
+  </div>
+
+  <!-- Floating Audio Controls & House Selector -->
+  <header id="magic-nav" class="magic-nav">
+    <div class="nav-brand">
+      <span class="crest-icon">⚡</span>
+      <span class="brand-title">Arijith's Grimoire</span>
+    </div>
+    
+    <div class="nav-links">
+      <a href="#acceptance-letter-section" class="nav-link"><i class="fa-solid fa-scroll"></i> Letter</a>
+      <a href="#about-section" class="nav-link"><i class="fa-solid fa-hat-wizard"></i> About</a>
+      <a href="#internship-section" class="nav-link"><i class="fa-solid fa-hourglass-half"></i> CogniLearn</a>
+      <a href="#skills-section" class="nav-link"><i class="fa-solid fa-wand-magic-sparkles"></i> Spells</a>
+      <a href="#projects-section" class="nav-link"><i class="fa-solid fa-dungeon"></i> Vaults</a>
+      <a href="#marauders-map-section" class="nav-link"><i class="fa-solid fa-shoe-prints"></i> Map</a>
+      <a href="#contact-section" class="nav-link"><i class="fa-solid fa-feather-pointed"></i> Owl Post</a>
+    </div>
+
+    <div class="nav-controls">
+      <!-- House Theme Picker -->
+      <div class="house-picker" title="Sort into your Hogwarts House">
+        <button class="house-btn active" data-house="gryffindor" title="Gryffindor">🦁</button>
+        <button class="house-btn" data-house="slytherin" title="Slytherin">🐍</button>
+        <button class="house-btn" data-house="ravenclaw" title="Ravenclaw">🦅</button>
+        <button class="house-btn" data-house="hufflepuff" title="Hufflepuff">🦡</button>
+      </div>
+
+      <!-- Magical Sound Toggle -->
+      <button id="sound-toggle-btn" class="magical-btn icon-btn" title="Toggle Magical Chimes & Hedwig Theme" aria-label="Toggle Sound">
+        <i class="fa-solid fa-volume-xmark" id="sound-icon"></i>
+        <span class="sound-text">Magic Sound</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Interactive Wand Spell Toolbar -->
+  <aside id="spell-dock" class="spell-dock" aria-label="Spells Quick Cast Toolbar">
+    <div class="spell-dock-title">
+      <i class="fa-solid fa-wand-sparkles"></i> Spells
+    </div>
+    <div class="spell-buttons">
+      <button class="spell-btn" data-spell="lumos" title="Cast Lumos to reveal secret runes and light up darkness!">
+        <span class="spell-glyph">✨</span>
+        <span class="spell-name">Lumos</span>
+      </button>
+      <button class="spell-btn" data-spell="leviosa" title="Cast Wingardium Leviosa to levitate parchment cards!">
+        <span class="spell-glyph">🪶</span>
+        <span class="spell-name">Leviosa</span>
+      </button>
+      <button class="spell-btn" data-spell="patronum" title="Cast Expecto Patronum to blast silver spirit mist!">
+        <span class="spell-glyph">🦌</span>
+        <span class="spell-name">Patronum</span>
+      </button>
+      <button class="spell-btn" data-spell="alohomora" title="Cast Alohomora to unlock secret chambers!">
+        <span class="spell-glyph">🗝️</span>
+        <span class="spell-name">Alohomora</span>
+      </button>
+      <button class="spell-btn" data-spell="nox" title="Nox - Extinguish light">
+        <span class="spell-glyph">🌑</span>
+        <span class="spell-name">Nox</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Golden Snitch Toast Notification Banner -->
+  <div id="snitch-toast" class="snitch-toast">
+    <div class="toast-content">
+      <span class="snitch-badge">🏆 150 POINTS!</span>
+      <p>You caught the Golden Snitch! "I open at the close."</p>
+    </div>
+  </div>
+
+  <!-- MAIN SCROLLABLE CONTENT -->
+  <main id="main-content">
+
+    <!-- HERO SECTION: The Great Hall & Acceptance Letter Arrival -->
+    <section id="hero-section" class="hero-section">
+      <!-- 3D Floating Candles Array -->
+      <div class="floating-candles-container" aria-hidden="true" id="floating-candles">
+        <!-- Injected via JavaScript for randomized organic flicker & heights -->
+      </div>
+
+      <div class="hero-centerpiece">
+        <div class="crest-emblem-wrap">
+          <img src="assets/wax_seal.jpg" alt="Hogwarts Magical Wax Seal Crest" class="hero-crest-img">
+        </div>
+        
+        <p class="hero-welcome-badge">✦ OWL POST DISPATCH FROM HOGWARTS ✦</p>
+        <h1 class="hero-title">
+          <span class="title-sub">The Wizarding Portfolio of</span>
+          <span class="title-main gold-shimmer">Arijith M</span>
+        </h1>
+        <p class="hero-subtitle">MCA Scholar • Software Sorcerer • Intern at CogniLearn</p>
+
+        <!-- Social Portals (GitHub & LinkedIn) -->
+        <div class="hero-quick-portals">
+          <a href="https://github.com/arijith-ad" target="_blank" rel="noopener noreferrer" class="portal-btn github-portal" id="hero-github-link">
+            <i class="fa-brands fa-github"></i>
+            <span>GitHub Spellbook</span>
+            <small class="portal-url">github.com/arijith-ad</small>
+          </a>
+          <a href="https://www.linkedin.com/in/arijith-m-3756a1327/?isSelfProfile=true" target="_blank" rel="noopener noreferrer" class="portal-btn linkedin-portal" id="hero-linkedin-link">
+            <i class="fa-brands fa-linkedin"></i>
+            <span>Ministry Profile (LinkedIn)</span>
+            <small class="portal-url">linkedin.com/in/arijith-m</small>
+          </a>
+        </div>
+
+        <div class="hero-action-row">
+          <button id="open-envelope-btn" class="magical-btn primary-gold">
+            <i class="fa-solid fa-envelope-open-text"></i> Open Acceptance Letter
+          </button>
+          <a href="#internship-section" class="magical-btn secondary-parchment">
+            <i class="fa-solid fa-compass"></i> CogniLearn Quest
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: THE HOGWARTS ACCEPTANCE LETTER -->
+    <section id="acceptance-letter-section" class="letter-section">
+      <div class="letter-scroll-wrapper">
+        <div class="envelope-back" id="envelope-interactive">
+          <div class="envelope-flap" id="envelope-flap">
+            <div class="wax-seal-btn" id="break-seal-btn" title="Click to break the seal!">
+              <img src="assets/wax_seal.jpg" alt="Wax Seal">
+              <span class="seal-tooltip">Click to Unseal</span>
+            </div>
+          </div>
+          <div class="envelope-pocket"></div>
+        </div>
+
+        <!-- The Unfolded Parchment Letter -->
+        <article class="parchment-letter open" id="parchment-doc">
+          <div class="parchment-header">
+            <div class="letter-seal-mini">
+              <img src="assets/wax_seal.jpg" alt="Wax Crest Mini">
+            </div>
+            <h2 class="letter-school-name">Hogwarts School of Witchcraft & Software Sorcery</h2>
+            <p class="letter-headmaster">Headmaster: <em>Albus Dumbledore</em> (Order of Merlin, First Class)</p>
+            <div class="parchment-divider">✧ ✦ ✧</div>
+          </div>
+
+          <div class="letter-body">
+            <p class="letter-salutation">Dear <strong>Mr. Arijith M</strong>,</p>
+            <p>
+              We are delighted to inform you that you possess exceptional aptitude in the mystical arts of 
+              <strong>Computer Applications (MCA)</strong> and modern algorithmic wizardry. You are formally recognized as an active 
+              <strong>MCA Student</strong>, mastering advanced software architecture, systems engineering, and enchanting digital creations.
+            </p>
+            
+            <div class="letter-highlight-box">
+              <div class="highlight-icon">⚡</div>
+              <div class="highlight-text">
+                <strong>Current Magical Appointment:</strong><br>
+                Presently enrolling for an exclusive Technical Internship at 
+                <span class="gold-text">CogniLearn</span>, embarking on live software development, engineering sprints, and innovation craft.
+              </div>
+            </div>
+
+            <p>
+              Your enchanted communication owls and spellbook repositories have been verified across the realm:
+            </p>
+
+            <ul class="letter-credentials-list">
+              <li>
+                <i class="fa-brands fa-github-alt"></i>
+                <strong>GitHub Grimoire:</strong> 
+                <a href="https://github.com/arijith-ad" target="_blank" rel="noopener noreferrer">https://github.com/arijith-ad</a>
+              </li>
+              <li>
+                <i class="fa-brands fa-linkedin-in"></i>
+                <strong>Ministry Registry (LinkedIn):</strong> 
+                <a href="https://www.linkedin.com/in/arijith-m-3756a1327/?isSelfProfile=true" target="_blank" rel="noopener noreferrer">Arijith M on LinkedIn</a>
+              </li>
+            </ul>
+
+            <p class="letter-closing">
+              Yours sincerely,<br>
+              <span class="mcgonagall-signature">Minerva McGonagall</span><br>
+              <em>Deputy Headmistress & Chair of Advanced Computational Magic</em>
+            </p>
+          </div>
+
+          <!-- Secret Invisibility Rune (Discovered with Lumos spell) -->
+          <div class="secret-rune" data-revealed-by="lumos">
+            <span>✨ SECRET SPELL REVEALED: "Expecto Git Push -f" — Arijith's code is guarded by a Patronus! ✨</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION: THE DAILY PROPHET (ABOUT & SCHOLAR PROFILE) -->
+    <section id="about-section" class="prophet-section">
+      <div class="section-title-wrap">
+        <span class="section-tag">THE DAILY PROPHET • SPECIAL EDITION</span>
+        <h2 class="section-heading">Moving Portraits & Wizard Profile</h2>
+      </div>
+
+      <div class="prophet-layout">
+        <!-- Moving Animated Newspaper Frame -->
+        <div class="prophet-paper">
+          <div class="paper-header">
+            <h3 class="prophet-logo">THE DAILY PROPHET</h3>
+            <div class="paper-meta">
+              <span>Price: 5 Knuts</span>
+              <span>• Ministry Approved •</span>
+              <span>Issue No. 1337</span>
+            </div>
+            <div class="paper-headline">
+              BRILLIANT MCA SCHOLAR ARIJITH M ENROLLS AT COGNILEARN!
+            </div>
+          </div>
+
+          <div class="paper-grid">
+            <!-- Animated Moving Wizard Photo -->
+            <div class="moving-portrait-frame">
+              <div class="portrait-photo">
+                <div class="portrait-avatar">
+                  <div class="wizard-silhouette">
+                    <span class="magical-initials">AM</span>
+                    <i class="fa-solid fa-hat-wizard portrait-hat"></i>
+                  </div>
+                  <div class="portrait-glimmer"></div>
+                  <div class="portrait-scanlines"></div>
+                </div>
+                <div class="portrait-caption">
+                  "Arijith M photographed transfiguring complex algorithms into seamless digital reality."
+                </div>
+              </div>
+            </div>
+
+            <!-- News Column Articles -->
+            <div class="paper-article">
+              <h4 class="article-title">MCA Academics & Software Sorcery</h4>
+              <p>
+                Currently pursuing a <strong>Master of Computer Applications (MCA)</strong>, Arijith M combines 
+                rigorous academic foundations in data structures, algorithms, and distributed computing with modern 
+                hands-on software development frameworks.
+              </p>
+              <p>
+                Colleagues and mentors speak of his unyielding dedication to clean architecture, problem-solving, 
+                and crafting user-facing enchantments that elevate experiences from mundane to magical.
+              </p>
+              
+              <div class="paper-bulletin">
+                <strong>QUICK FACTS:</strong>
+                <ul>
+                  <li><strong>Status:</strong> MCA Scholar (Master of Computer Applications)</li>
+                  <li><strong>Core Focus:</strong> Full-Stack Development, Problem Solving & Software Engineering</li>
+                  <li><strong>Current Mission:</strong> Enrolling at CogniLearn for Professional Internship</li>
+                  <li><strong>Code Sanctum:</strong> <a href="https://github.com/arijith-ad" target="_blank">github.com/arijith-ad</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: COGNILEARN INTERNSHIP QUEST & WORK SCHEDULE -->
+    <section id="internship-section" class="internship-section">
+      <div class="section-title-wrap">
+        <span class="section-tag">MINISTRY OF INNOVATION APPOINTMENT</span>
+        <h2 class="section-heading">CogniLearn Internship & Work Schedule</h2>
+        <p class="section-desc">Active enrollment track, live onboarding milestones, and enchanted daily engineering routine.</p>
+      </div>
+
+      <div class="internship-showcase">
+        <!-- CogniLearn Overview Scroll -->
+        <div class="cognilearn-card">
+          <div class="card-crest">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="card-content">
+            <span class="badge-active"><i class="fa-solid fa-spinner fa-spin"></i> Currently Enrolling & Onboarding</span>
+            <h3>Software Development Intern</h3>
+            <h4>CogniLearn Tech Guild</h4>
+            <p>
+              Arijith M is actively enrolling into CogniLearn's high-impact internship initiative, bridging MCA academic theory 
+              with industry software development, practical cloud applications, and agile engineering sprints.
+            </p>
+            <div class="internship-meta-tags">
+              <span><i class="fa-solid fa-calendar-check"></i> Active Enrollment</span>
+              <span><i class="fa-solid fa-laptop-code"></i> Hands-on Development</span>
+              <span><i class="fa-solid fa-users-gear"></i> Collaborative Sprints</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Magical Daily Schedule Scroll -->
+        <div class="schedule-scroll-wrap">
+          <div class="schedule-title-banner">
+            <i class="fa-solid fa-clock-rotate-left"></i> The Daily Marauder's Schedule
+          </div>
+          <div class="schedule-timeline">
+            
+            <div class="schedule-item">
+              <div class="time-rune">09:30 AM</div>
+              <div class="schedule-details">
+                <h5>Daily Divination & Standup</h5>
+                <p>Aligning project objectives, sprint backlog items, and architectural targets for the day.</p>
+              </div>
+            </div>
+
+            <div class="schedule-item">
+              <div class="time-rune">11:00 AM</div>
+              <div class="schedule-details">
+                <h5>Core Enchantment & Coding Sprint</h5>
+                <p>Writing clean, production-grade logic, frontend interactions, and backend API routes.</p>
+              </div>
+            </div>
+
+            <div class="schedule-item">
+              <div class="time-rune">02:00 PM</div>
+              <div class="schedule-details">
+                <h5>Potion Testing & Defense Against Code Bugs</h5>
+                <p>Rigorous unit tests, edge-case debugging, code refactoring, and peer reviews.</p>
+              </div>
+            </div>
+
+            <div class="schedule-item">
+              <div class="time-rune">04:30 PM</div>
+              <div class="schedule-details">
+                <h5>Tech Alchemy & Continuous Learning</h5>
+                <p>Exploring state-of-the-art libraries, modern tooling, system optimizations, and MCA research.</p>
+              </div>
+            </div>
+
+            <div class="schedule-item">
+              <div class="time-rune">06:00 PM</div>
+              <div class="schedule-details">
+                <h5>The Daily Commit & Mischief Managed</h5>
+                <p>Git pushes to remote repositories, document updates, and preparing next dawn's roadmap.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: THE SPELLBOOK OF SKILLS -->
+    <section id="skills-section" class="skills-section">
+      <div class="section-title-wrap">
+        <span class="section-tag">STANDARD BOOK OF SPELLS</span>
+        <h2 class="section-heading">Technical Charms & Potions</h2>
+        <p class="section-desc">The spells, potions, and alchemy powering Arijith's computational craft.</p>
+      </div>
+
+      <div class="spell-grid">
+        <!-- Category 1: Charms (Languages) -->
+        <div class="spellbook-card">
+          <div class="book-spine"></div>
+          <div class="book-cover">
+            <div class="spell-icon"><i class="fa-solid fa-code"></i></div>
+            <h3>Core Charms</h3>
+            <span class="book-category">Programming Languages</span>
+            <ul class="mana-skill-list">
+              <li>
+                <span>Python & Logic</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 90%;"></div></div>
+              </li>
+              <li>
+                <span>JavaScript / ES6+</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 88%;"></div></div>
+              </li>
+              <li>
+                <span>Java & Object Magic</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 85%;"></div></div>
+              </li>
+              <li>
+                <span>C / C++ Fundamentals</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 82%;"></div></div>
+              </li>
+              <li>
+                <span>SQL Invocations</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 86%;"></div></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Category 2: Transfiguration (Frameworks & Web) -->
+        <div class="spellbook-card">
+          <div class="book-spine"></div>
+          <div class="book-cover">
+            <div class="spell-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <h3>Transfiguration</h3>
+            <span class="book-category">Web Craft & Frameworks</span>
+            <ul class="mana-skill-list">
+              <li>
+                <span>HTML5 & Semantic Structure</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 95%;"></div></div>
+              </li>
+              <li>
+                <span>CSS3, Grids & Animations</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 92%;"></div></div>
+              </li>
+              <li>
+                <span>React & Reactive State</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 84%;"></div></div>
+              </li>
+              <li>
+                <span>Node.js / Express Runes</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 80%;"></div></div>
+              </li>
+              <li>
+                <span>REST APIs & Integration</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 87%;"></div></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Category 3: Potions & Alchemy (Computer Science & Tools) -->
+        <div class="spellbook-card">
+          <div class="book-spine"></div>
+          <div class="book-cover">
+            <div class="spell-icon"><i class="fa-solid fa-flask"></i></div>
+            <h3>Potions & Alchemy</h3>
+            <span class="book-category">MCA Theory & Engineering</span>
+            <ul class="mana-skill-list">
+              <li>
+                <span>Data Structures & Algorithmic Design</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 88%;"></div></div>
+              </li>
+              <li>
+                <span>Database Management Systems (DBMS)</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 86%;"></div></div>
+              </li>
+              <li>
+                <span>Git & GitHub Grimoire Control</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 90%;"></div></div>
+              </li>
+              <li>
+                <span>Operating Systems & Linux Shell</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 82%;"></div></div>
+              </li>
+              <li>
+                <span>Software Engineering Methodologies</span>
+                <div class="mana-bar"><div class="mana-fill" style="--level: 88%;"></div></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: THE ROOM OF REQUIREMENT (PROJECT VAULT) -->
+    <section id="projects-section" class="projects-section">
+      <div class="section-title-wrap">
+        <span class="section-tag">THE ROOM OF REQUIREMENT</span>
+        <h2 class="section-heading">Enchanted Project Vaults</h2>
+        <p class="section-desc">Magical artifacts crafted with precision code. Unlocked via Alohomora or direct inspection.</p>
+      </div>
+
+      <div class="vault-grid">
+        <!-- Project 1 -->
+        <div class="vault-card">
+          <div class="vault-card-inner">
+            <div class="card-glow"></div>
+            <div class="vault-icon">🔮</div>
+            <h4>Full-Stack Intelligent Web Portal</h4>
+            <p>A high-performance modern web application featuring intuitive interfaces, modular backend services, and secure authentication charms.</p>
+            <div class="tech-tags">
+              <span>React</span>
+              <span>Node.js</span>
+              <span>MongoDB</span>
+            </div>
+            <div class="card-links">
+              <a href="https://github.com/arijith-ad" target="_blank" class="vault-link">
+                <i class="fa-brands fa-github"></i> Repository
+              </a>
+              <span class="vault-status">Active Artifact</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="vault-card">
+          <div class="vault-card-inner">
+            <div class="card-glow"></div>
+            <div class="vault-icon">⚡</div>
+            <h4>Algorithmic Analysis & Data Grimoire</h4>
+            <p>Comprehensive MCA research repository benchmarking sorting spells, tree traversals, dynamic programming formulas, and graph labyrinths.</p>
+            <div class="tech-tags">
+              <span>Python</span>
+              <span>Algorithms</span>
+              <span>Data Structures</span>
+            </div>
+            <div class="card-links">
+              <a href="https://github.com/arijith-ad" target="_blank" class="vault-link">
+                <i class="fa-brands fa-github"></i> Repository
+              </a>
+              <span class="vault-status">MCA Academic</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="vault-card">
+          <div class="vault-card-inner">
+            <div class="card-glow"></div>
+            <div class="vault-icon">📜</div>
+            <h4>CogniLearn Training Lab & Project Suite</h4>
+            <p>Enterprise-grade application modules developed during internship preparation, emphasizing robust unit testing, clean code, and API contracts.</p>
+            <div class="tech-tags">
+              <span>JavaScript</span>
+              <span>REST APIs</span>
+              <span>Git Workflows</span>
+            </div>
+            <div class="card-links">
+              <a href="https://github.com/arijith-ad" target="_blank" class="vault-link">
+                <i class="fa-brands fa-github"></i> Repository
+              </a>
+              <span class="vault-status">CogniLearn Suite</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: THE MARAUDER'S MAP (INTERACTIVE TIMELINE) -->
+    <section id="marauders-map-section" class="marauders-section">
+      <div class="map-parchment-frame">
+        <div class="map-ornament top-left"></div>
+        <div class="map-ornament top-right"></div>
+        <div class="map-ornament bottom-left"></div>
+        <div class="map-ornament bottom-right"></div>
+
+        <div class="map-header">
+          <div class="map-crest-quote">
+            "Messrs Moony, Wormtail, Padfoot, & Prongs are proud to present"
+          </div>
+          <h2 class="map-title">THE MARAUDER'S MAP</h2>
+          <p class="map-subtitle">A Chronological Expedition Through Arijith's Journey</p>
+
+          <button id="marauder-toggle-btn" class="magical-btn solemn-btn">
+            <i class="fa-solid fa-shoe-prints"></i>
+            <span id="map-btn-text">"I solemnly swear that I am up to no good"</span>
+          </button>
+        </div>
+
+        <!-- Interactive Footsteps & Trails Container -->
+        <div class="map-canvas-wrap" id="map-trail-container">
+          <svg class="map-footsteps-svg" id="footsteps-svg" viewBox="0 0 1000 400" preserveAspectRatio="none">
+            <!-- Dynamic footprint path drawn by JS -->
+            <path id="footstep-path" d="M 50,200 Q 250,80 500,200 T 950,200" fill="none" stroke="rgba(112, 66, 20, 0.3)" stroke-width="2" stroke-dasharray="6,6"/>
+          </svg>
+
+          <!-- Timeline Waypoints along the Map -->
+          <div class="map-waypoints">
+            <div class="waypoint wp-1 active">
+              <div class="waypoint-pin"><i class="fa-solid fa-compass"></i></div>
+              <div class="waypoint-label">
+                <span class="wp-date">Foundation Years</span>
+                <h4>The Undergrad Awakening</h4>
+                <p>Discovered passion for computational logic, mathematics, and building digital systems.</p>
+              </div>
+            </div>
+
+            <div class="waypoint wp-2 active">
+              <div class="waypoint-pin"><i class="fa-solid fa-scroll"></i></div>
+              <div class="waypoint-label">
+                <span class="wp-date">Current Academia</span>
+                <h4>MCA Studies</h4>
+                <p>Mastering advanced computer applications, algorithm optimization, cloud, and distributed architectures.</p>
+              </div>
+            </div>
+
+            <div class="waypoint wp-3 active pulse-waypoint">
+              <div class="waypoint-pin"><i class="fa-solid fa-wand-magic"></i></div>
+              <div class="waypoint-label">
+                <span class="wp-date">Present Day</span>
+                <h4>CogniLearn Internship</h4>
+                <p>Enrolling for professional software engineering internship, tackling live development tasks.</p>
+              </div>
+            </div>
+
+            <div class="waypoint wp-4">
+              <div class="waypoint-pin"><i class="fa-solid fa-crown"></i></div>
+              <div class="waypoint-label">
+                <span class="wp-date">Horizon</span>
+                <h4>Full-Stack Sorcerer</h4>
+                <p>Architecting scalable solutions, contributing to high-impact software ecosystems worldwide.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-footer">
+          <p id="mischief-status">Footsteps revealed across Hogwarts grounds.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: OWL POST & CONTACT PORTAL -->
+    <section id="contact-section" class="contact-section">
+      <div class="section-title-wrap">
+        <span class="section-tag">THE OWLERY</span>
+        <h2 class="section-heading">Send an Owl to Arijith</h2>
+        <p class="section-desc">Reach out for collaborations, engineering opportunities, or to talk tech magic.</p>
+      </div>
+
+      <div class="contact-container">
+        <!-- Owl Post Dispatch Form -->
+        <div class="owl-form-card">
+          <form id="owl-dispatch-form" class="owl-form">
+            <div class="form-group">
+              <label for="wizard-name"><i class="fa-solid fa-signature"></i> Your Name & Title</label>
+              <input type="text" id="wizard-name" required placeholder="e.g. Albus Dumbledore, Tech Lead">
+            </div>
+
+            <div class="form-group">
+              <label for="wizard-email"><i class="fa-solid fa-at"></i> Communication Rune (Email)</label>
+              <input type="email" id="wizard-email" required placeholder="your.name@domain.com">
+            </div>
+
+            <div class="form-group">
+              <label for="wizard-message"><i class="fa-solid fa-pen-nib"></i> Enchanted Scroll Message</label>
+              <textarea id="wizard-message" rows="4" required placeholder="Greetings Arijith, we have an exciting project / opportunity..."></textarea>
+            </div>
+
+            <button type="submit" class="magical-btn primary-gold send-owl-btn" id="send-owl-btn">
+              <i class="fa-solid fa-feather-pointed"></i> Send by Hedwig's Owl
+            </button>
+          </form>
+
+          <div id="owl-fly-animation" class="owl-flight-box hidden">
+            <div class="flying-owl">🦉</div>
+            <p>Your parchment has taken flight through the starry night!</p>
+          </div>
+        </div>
+
+        <!-- Portals & Direct Links -->
+        <div class="owl-direct-links">
+          <div class="owl-link-box">
+            <div class="link-icon"><i class="fa-brands fa-github"></i></div>
+            <div class="link-text">
+              <h4>GitHub Grimoire</h4>
+              <p>Explore source code repositories, open-source projects, and code spells.</p>
+              <a href="https://github.com/arijith-ad" target="_blank" rel="noopener noreferrer" class="enchanted-link">
+                Visit https://github.com/arijith-ad <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="owl-link-box">
+            <div class="link-icon"><i class="fa-brands fa-linkedin"></i></div>
+            <div class="link-text">
+              <h4>Ministry of Magic (LinkedIn)</h4>
+              <p>Connect professionally, endorse skills, and follow internship updates at CogniLearn.</p>
+              <a href="https://www.linkedin.com/in/arijith-m-3756a1327/?isSelfProfile=true" target="_blank" rel="noopener noreferrer" class="enchanted-link">
+                Connect with Arijith M on LinkedIn <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="owl-link-box">
+            <div class="link-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="link-text">
+              <h4>MCA Scholar Status</h4>
+              <p>Focusing on Modern Software Applications, Algorithmic Craft & Industry Readiness.</p>
+              <span class="status-pill">Active Student & CogniLearn Intern</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="magical-footer" class="magical-footer">
+    <div class="footer-wax-seal">
+      <img src="assets/wax_seal.jpg" alt="Wax Seal">
+    </div>
+    <p class="footer-quote">
+      "Words are, in my not-so-humble opinion, our most inexhaustible source of magic. Capable of both inflicting injury, and remedying it."
+    </p>
+    <p class="footer-credit">
+      Crafted with pure HTML, CSS, JavaScript & Wizardry for <strong>Arijith M</strong>. All rights reserved.
+    </p>
+    <p class="footer-motto">
+      <em>Draco Dormiens Nunquam Titillandus</em>
+    </p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
